@@ -16,7 +16,7 @@ namespace Chat_Server_Console
         static int cind = 0;
         static void Main(string[] args)
         {
-            Boolean inputflag = true;
+            /*Boolean inputflag = true;
             while (inputflag)
             {
                 Console.WriteLine("Enter server IPAddress");
@@ -57,7 +57,7 @@ namespace Chat_Server_Console
                     Console.WriteLine("Invalid port, try one more time");
                 }
             }
-
+            */
 
             // получаем адреса для запуска сокета
             IPEndPoint ipPoint = new IPEndPoint(ip, port);
@@ -76,13 +76,20 @@ namespace Chat_Server_Console
                 
                 Boolean listening = true;
                 i = 0;
-                while (i<10)
+                while (i < 10)
                 {
                     Thread thread = new Thread(new ParameterizedThreadStart(thread_proc));
                     thread.Start(i);
                     i++;
+                }   
+                        //string message = "Your message is recived";
+                        //data = Encoding.Unicode.GetBytes(message);
+                        //handler.Send(data);
+                        // закрываем сокет
+                       
+                    
 
-                }
+                
 
             }
             catch (Exception ex)
@@ -93,8 +100,8 @@ namespace Chat_Server_Console
         public static void thread_proc(object param)
         {
             Socket handler = listenSocket.Accept();
-            //clients[cind] = handler;
-            //cind++;
+            clients[cind] = handler;
+            cind++;
             Boolean flag = true;
             while (flag)
             {
@@ -111,14 +118,15 @@ namespace Chat_Server_Console
 
                 
 
-                // отправляем ответ всем остальным
-                //for (int i = 0; i < 10; i++)
-                //{
-                //    if (i!=cind && clients[i] != null)
-                //    {
-               //         handler.Send(data);
-                //    }
-               // }
+                 //отправляем ответ всем остальным
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i!=cind && clients[i]!=null)
+                    {
+                        if (clients[i].Connected && data[0]!=0)
+                          handler.Send(data);
+                    }
+                }
                 //string message = "Your message is recived";
                 //data = Encoding.Unicode.GetBytes(message);
                 //handler.Send(data);
